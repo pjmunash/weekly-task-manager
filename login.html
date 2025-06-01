@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Weekly Task Manager</title>
+  <link rel="icon" type="image/jpg" href="icon.jpg" />
+  <style>
+    body {
+      background: #1a1a1a;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 8px;
+      width: 250px;
+      border-radius: 6px;
+      border: none;
+    }
+    button {
+      background-color: #ff4500;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome Back 👋</h1>
+  <input type="email" id="email" placeholder="Email" /><br/>
+  <input type="password" id="password" placeholder="Password" /><br/>
+  <button onclick="login()">Login</button>
+  <button onclick="signup()">Sign Up</button>
+  <button onclick="signInWithGoogle()">Sign In with Google</button>
+
+  <script type="module">
+    import { auth } from './firebase-config.js';
+    import {
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const emailInput = document.getElementById("email");
+    const passInput = document.getElementById("password");
+
+    window.login = async () => {
+      try {
+        await signInWithEmailAndPassword(auth, emailInput.value, passInput.value);
+        location.href = "index.html";
+      } catch (e) {
+        alert("Login failed: " + e.message);
+      }
+    };
+
+    window.signup = async () => {
+      try {
+        await createUserWithEmailAndPassword(auth, emailInput.value, passInput.value);
+        location.href = "index.html";
+      } catch (e) {
+        alert("Signup failed: " + e.message);
+      }
+    };
+
+    window.signInWithGoogle = async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+        location.href = "index.html";
+      } catch (e) {
+        alert("Google Sign-in failed: " + e.message);
+      }
+    };
+  </script>
+</body>
+</html>
+
